@@ -1,0 +1,367 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A1B2C3D40E5F678900000030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40E5F678900000010 /* AppDelegate.swift */; };
+		A1B2C3D40E5F678900000032 /* RustCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40E5F678900000012 /* RustCore.swift */; };
+		A1B2C3D40E5F678900000033 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40E5F678900000014 /* Assets.xcassets */; };
+		A1B2C3D40E5F678900000034 /* librust_core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1B2C3D40E5F678900000016 /* librust_core.a */; };
+		A1B2C3D40E5F678900000040 /* TrayChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40E5F678900000024 /* TrayChatView.swift */; };
+		A1B2C3D40E5F678900000041 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40E5F678900000025 /* ChatViewModel.swift */; };
+		E1F2A3B40E5F678900000050 /* LindosTrayAppMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F2A3B40E5F678900000051 /* LindosTrayAppMain.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A1B2C3D40E5F678900000010 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A1B2C3D40E5F678900000012 /* RustCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustCore.swift; sourceTree = "<group>"; };
+		A1B2C3D40E5F678900000013 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A1B2C3D40E5F678900000014 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A1B2C3D40E5F678900000015 /* LindosTrayApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LindosTrayApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		A1B2C3D40E5F678900000016 /* librust_core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = librust_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1B2C3D40E5F678900000023 /* LindosTrayApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LindosTrayApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1B2C3D40E5F678900000024 /* TrayChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrayChatView.swift; sourceTree = "<group>"; };
+		A1B2C3D40E5F678900000025 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		E1F2A3B40E5F678900000051 /* LindosTrayAppMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LindosTrayAppMain.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A1B2C3D40E5F67890000000A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D40E5F678900000034 /* librust_core.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A1B2C3D40E5F678900000020 = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D40E5F678900000021 /* LindosTrayApp */,
+				A1B2C3D40E5F678900000022,
+				E17F9F9D2EB24ADF00F90582 /* Recovered References */,
+			);
+			sourceTree = "<group>";
+		};
+		A1B2C3D40E5F678900000021 /* LindosTrayApp */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D40E5F678900000010 /* AppDelegate.swift */,
+				A1B2C3D40E5F678900000012 /* RustCore.swift */,
+				A1B2C3D40E5F678900000024 /* TrayChatView.swift */,
+				A1B2C3D40E5F678900000025 /* ChatViewModel.swift */,
+				E1F2A3B40E5F678900000051 /* LindosTrayAppMain.swift */,
+				A1B2C3D40E5F678900000015 /* LindosTrayApp-Bridging-Header.h */,
+				A1B2C3D40E5F678900000014 /* Assets.xcassets */,
+				A1B2C3D40E5F678900000013 /* Info.plist */,
+			);
+			path = LindosTrayApp;
+			sourceTree = "<group>";
+		};
+		A1B2C3D40E5F678900000022 = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D40E5F678900000023 /* LindosTrayApp.app */,
+			);
+			sourceTree = "<group>";
+		};
+		E17F9F9D2EB24ADF00F90582 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D40E5F678900000016 /* librust_core.a */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A1B2C3D40E5F678900000005 /* LindosTrayApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1B2C3D40E5F678900000006 /* Build configuration list for PBXNativeTarget "LindosTrayApp" */;
+			buildPhases = (
+				A1B2C3D40E5F67890000000C /* Build Rust Core */,
+				A1B2C3D40E5F678900000009 /* Sources */,
+				A1B2C3D40E5F67890000000A /* Frameworks */,
+				A1B2C3D40E5F67890000000B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LindosTrayApp;
+			productName = LindosTrayApp;
+			productReference = A1B2C3D40E5F678900000023 /* LindosTrayApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A1B2C3D40E5F678900000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1640;
+				ORGANIZATIONNAME = "";
+				TargetAttributes = {
+					A1B2C3D40E5F678900000005 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A1B2C3D40E5F678900000002 /* Build configuration list for PBXProject "LindosTrayApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A1B2C3D40E5F678900000020;
+			productRefGroup = A1B2C3D40E5F678900000022;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A1B2C3D40E5F678900000005 /* LindosTrayApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A1B2C3D40E5F67890000000B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D40E5F678900000033 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A1B2C3D40E5F67890000000C /* Build Rust Core */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Rust Core";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/librust_core.a",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\nRUST_PROJECT=\"$SRCROOT/../../rust-core\"\nif ! command -v cargo >/dev/null 2>&1; then\n  if [ -f \"$HOME/.cargo/env\" ]; then\n    . \"$HOME/.cargo/env\"\n  else\n    export PATH=\"$HOME/.cargo/bin:$PATH\"\n  fi\nfi\nif ! command -v cargo >/dev/null 2>&1; then\n  echo \"cargo is required but was not found in PATH\" >&2\n  exit 1\nfi\nif [ \"$CONFIGURATION\" = \"Release\" ]; then\n  cargo build --manifest-path \"$RUST_PROJECT/Cargo.toml\" --release\n  mkdir -p \"$BUILT_PRODUCTS_DIR\"\n  cp \"$RUST_PROJECT/target/release/librust_core.a\" \"$BUILT_PRODUCTS_DIR\"\nelse\n  cargo build --manifest-path \"$RUST_PROJECT/Cargo.toml\"\n  mkdir -p \"$BUILT_PRODUCTS_DIR\"\n  cp \"$RUST_PROJECT/target/debug/librust_core.a\" \"$BUILT_PRODUCTS_DIR\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A1B2C3D40E5F678900000009 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1F2A3B40E5F678900000050 /* LindosTrayAppMain.swift in Sources */,
+				A1B2C3D40E5F678900000032 /* RustCore.swift in Sources */,
+				A1B2C3D40E5F678900000041 /* ChatViewModel.swift in Sources */,
+				A1B2C3D40E5F678900000040 /* TrayChatView.swift in Sources */,
+				A1B2C3D40E5F678900000030 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A1B2C3D40E5F678900000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A1B2C3D40E5F678900000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A1B2C3D40E5F678900000007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../../rust-core/include";
+				INFOPLIST_FILE = LindosTrayApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BUILT_PRODUCTS_DIR)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.lindos;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "LindosTrayApp/LindosTrayApp-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A1B2C3D40E5F678900000008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../../rust-core/include";
+				INFOPLIST_FILE = LindosTrayApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BUILT_PRODUCTS_DIR)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.lindos;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "LindosTrayApp/LindosTrayApp-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A1B2C3D40E5F678900000002 /* Build configuration list for PBXProject "LindosTrayApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3D40E5F678900000003 /* Debug */,
+				A1B2C3D40E5F678900000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A1B2C3D40E5F678900000006 /* Build configuration list for PBXNativeTarget "LindosTrayApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3D40E5F678900000007 /* Debug */,
+				A1B2C3D40E5F678900000008 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A1B2C3D40E5F678900000001 /* Project object */;
+}

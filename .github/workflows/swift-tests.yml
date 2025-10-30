@@ -13,6 +13,7 @@ on:
       - 'macos/**/*.swift'
       - '.github/workflows/swift-tests.yml'
       - '.swiftlint.yml'
+  workflow_dispatch:  # Allow manual triggering
 
 jobs:
   lint:
@@ -71,14 +72,21 @@ jobs:
           cd rust-core
           cargo build
       
+      - name: Install dependencies
+        run: |
+          gem install xcpretty
+      
       - name: Run tests
         run: |
+          set -o pipefail
+          # Note: Test target must be manually added to Xcode project first
+          # See macos/XCODE_TEST_SETUP.md for instructions
           xcodebuild test \
             -project macos/LindosTrayApp/LindosTrayApp.xcodeproj \
             -scheme LindosTrayApp \
             -destination 'platform=macOS' \
             -enableCodeCoverage YES \
-            | xcpretty --test --color
+            2>&1 | xcpretty --test --color
         continue-on-error: false
       
       - name: Upload test results

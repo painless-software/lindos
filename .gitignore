@@ -1,0 +1,10 @@
+# Rust build output
+target/
+**/*.rs.bk
+
+# Xcode derived data
+build/
+xcuserdata/
+
+# macOS metadata
+.DS_Store

@@ -4,6 +4,8 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
 
+from rust_core import RustCore
+
 
 class LindosTrayApp(Gtk.Window):
     def __init__(self):
@@ -39,8 +41,18 @@ class LindosTrayApp(Gtk.Window):
         self.call_external_library(text)
 
     def call_external_library(self, text):
-        # Replace this print statement with your external library call
-        print(f"Text changed: {text}")
+        """Call the Rust core library to process the text."""
+        if not text:
+            # Don't process empty text
+            return
+        
+        # Process the message using Rust core
+        result, error = RustCore.process_with_result(text)
+        
+        if error:
+            print(f"Error processing message: {error.message}")
+        else:
+            print(f"Rust response: {result}")
 
     def on_key_press(self, widget, key_event):
         """Close application window on Escape key or Ctrl+Space."""

@@ -11,4 +11,4 @@ crate-type = ["staticlib", "cdylib"]
 ffi-support = "0.4"
 
 [build-dependencies]
-cbindgen = "0.26"
+cbindgen = "0.29"

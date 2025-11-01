@@ -1,46 +1,31 @@
 # Lindos Tray App
 
-Your friendly desktop assistent. A tray icon for tedious chores and lovely conversations.
+Your friendly desktop assistant. A tray icon for tedious chores and lovely conversations.
 
 ## Quick Start
 
-### Prerequisites
-
-- macOS with Xcode (including the command-line tools) for the tray app build.
-- Rust toolchain with `cargo` (install via [rustup](https://rustup.rs/)).
+This project uses [Just][just] for common development tasks. Install it first:
 
 ```bash
-# build Rust + macOS app
-scripts/build_macos.sh debug
+# macOS
+brew install just
+
+# Linux (Cargo)
+cargo install just
+
+# or with uv
+uv tool install rust-just
 ```
 
-Or open `macos/LindosTrayApp/LindosTrayApp.xcodeproj` and hit Run in Xcode.
-
-## Run Rust Tests
+Then see all available commands:
 
 ```bash
-# from the repo root
-cd rust-core
-cargo test
+just
 ```
 
-## Code Coverage
+[just]: https://just.systems/man/en/
 
-Generate test coverage reports locally using [cargo-llvm-cov](https://github.com/taiki-e/cargo-llvm-cov):
+## Development
 
-```bash
-# Install cargo-llvm-cov (one-time setup)
-cargo install cargo-llvm-cov
-
-# Generate coverage report in terminal
-cd rust-core
-cargo llvm-cov
-
-# Generate HTML coverage report (opens in browser)
-cargo llvm-cov --open
-
-# Generate LCOV format for integration with other tools
-cargo llvm-cov --lcov --output-path lcov.info
-```
-
-Coverage is automatically measured in CI and reported to Codecov on pull requests.
+This code is hosted on GitHub. Code changes will trigger a GHA pipeline, which
+runs linting, tests and code coverage.

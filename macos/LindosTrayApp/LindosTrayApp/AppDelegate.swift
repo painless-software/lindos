@@ -7,8 +7,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private lazy var statusIcon: NSImage = {
         if #available(macOS 11.0, *) {
             let configuration = NSImage.SymbolConfiguration(scale: .medium)
-            if let symbol = NSImage(systemSymbolName: "bubble.left.and.bubble.right.fill",
-                                    accessibilityDescription: "Lindos")?
+            if let symbol = NSImage(
+                systemSymbolName: "bubble.left.and.bubble.right.fill",
+                accessibilityDescription: "Lindos"
+            )?
                 .withSymbolConfiguration(configuration) {
                 symbol.isTemplate = true
                 return symbol
@@ -92,7 +94,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         popover.contentViewController = hostingController
     }
 
-    @objc private func togglePopover(_ sender: Any?) {
+    @objc
+    private func togglePopover(_ sender: Any?) {
         guard let button = statusItem?.button else { return }
 
         if popover.isShown {

@@ -4,8 +4,7 @@ import Cocoa
 
 /// Tests for AppDelegate initialization and configuration
 final class AppDelegateTests: XCTestCase {
-
-    var appDelegate: AppDelegate!
+    private var appDelegate = AppDelegate()
 
     override func setUp() {
         super.setUp()
@@ -13,7 +12,6 @@ final class AppDelegateTests: XCTestCase {
     }
 
     override func tearDown() {
-        appDelegate = nil
         super.tearDown()
     }
 

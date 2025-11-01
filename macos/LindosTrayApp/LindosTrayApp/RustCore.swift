@@ -45,19 +45,15 @@ enum RustCore {
 
         var value: String? {
             switch self {
-            case .success(let string):
-                return string
-            case .failure:
-                return nil
+            case .success(let string): string
+            case .failure: nil
             }
         }
 
         var error: ProcessingError? {
             switch self {
-            case .success:
-                return nil
-            case .failure(let error):
-                return error
+            case .success: nil
+            case .failure(let error): error
             }
         }
     }

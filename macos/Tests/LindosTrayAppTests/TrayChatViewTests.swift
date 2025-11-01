@@ -4,7 +4,6 @@ import SwiftUI
 
 /// Tests for TrayChatView UI components
 final class TrayChatViewTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testViewInitialization() {

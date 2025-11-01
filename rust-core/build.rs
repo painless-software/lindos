@@ -14,7 +14,9 @@ fn main() {
     let config = cbindgen::Config::from_file(PathBuf::from(&crate_dir).join("cbindgen.toml")).ok();
 
     let mut builder = cbindgen::Builder::new();
-    builder = builder.with_crate(&crate_dir).with_language(cbindgen::Language::C);
+    builder = builder
+        .with_crate(&crate_dir)
+        .with_language(cbindgen::Language::C);
 
     if let Some(cfg) = config {
         builder = builder.with_config(cfg);

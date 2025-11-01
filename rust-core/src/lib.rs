@@ -181,21 +181,24 @@ pub extern "C" fn lindos_error_message(error_code: i32) -> *mut c_char {
 /// - The pointer is freed exactly once
 /// - The pointer is not used after being freed
 #[no_mangle]
-pub extern "C" fn lindos_string_free(ptr: *mut c_char) {
+pub unsafe extern "C" fn lindos_string_free(ptr: *mut c_char) {
     if ptr.is_null() {
         eprintln!("Warning: Attempted to free null pointer");
         return;
     }
 
-    unsafe {
-        let _ = CString::from_raw(ptr);
-        // CString will be dropped here, freeing the memory
-    }
+    let _ = CString::from_raw(ptr);
+    // CString will be dropped here, freeing the memory
 }
 
 /// Free a RustResult structure and its associated memory
+///
+/// # Safety
+/// This function is safe to call as long as:
+/// - The result was returned by a function from this library
+/// - The result is freed exactly once
 #[no_mangle]
-pub extern "C" fn lindos_result_free(result: RustResult) {
+pub unsafe extern "C" fn lindos_result_free(result: RustResult) {
     if !result.data.is_null() {
         lindos_string_free(result.data);
     }
@@ -230,6 +233,15 @@ mod tests {
     use super::*;
     use std::ffi::CString;
 
+    // Helper functions to make unsafe FFI calls safer and more convenient in tests
+    fn free_string(ptr: *mut c_char) {
+        unsafe { lindos_string_free(ptr) }
+    }
+
+    fn free_result(result: RustResult) {
+        unsafe { lindos_result_free(result) }
+    }
+
     #[test]
     fn test_generate_reply() {
         assert_eq!(generate_reply("hi").unwrap(), "You said: hi");
@@ -263,7 +275,7 @@ mod tests {
         assert_eq!(result.error_code, 1);
 
         // Clean up
-        lindos_result_free(result);
+        free_result(result);
 
         // Test valid input
         let test_str = CString::new("hello").unwrap();
@@ -276,7 +288,7 @@ mod tests {
         assert_eq!(response, "You said: hello");
 
         // Clean up
-        lindos_result_free(result);
+        free_result(result);
     }
 
     #[test]
@@ -308,7 +320,7 @@ mod tests {
     #[test]
     fn test_memory_safety() {
         // Test that we can safely free null pointers
-        lindos_string_free(std::ptr::null_mut());
+        free_string(std::ptr::null_mut());
 
         // Test normal string creation and freeing
         let test_str = CString::new("test").unwrap();
@@ -316,7 +328,7 @@ mod tests {
         assert!(!result.is_null());
 
         // This should not crash
-        lindos_string_free(result);
+        free_string(result);
     }
 
     #[test]
@@ -325,17 +337,17 @@ mod tests {
         let msg1 = lindos_error_message(1);
         let response1 = unsafe { CStr::from_ptr(msg1).to_str().unwrap() };
         assert_eq!(response1, "No message provided");
-        lindos_string_free(msg1);
+        free_string(msg1);
 
         let msg2 = lindos_error_message(2);
         let response2 = unsafe { CStr::from_ptr(msg2).to_str().unwrap() };
         assert_eq!(response2, "Message contains invalid characters");
-        lindos_string_free(msg2);
+        free_string(msg2);
 
         let msg_unknown = lindos_error_message(999);
         let response_unknown = unsafe { CStr::from_ptr(msg_unknown).to_str().unwrap() };
         assert_eq!(response_unknown, "Unknown error");
-        lindos_string_free(msg_unknown);
+        free_string(msg_unknown);
     }
 
     #[test]
@@ -354,7 +366,7 @@ mod tests {
         assert!(result.success);
         let response = unsafe { CStr::from_ptr(result.data).to_str().unwrap() };
         assert_eq!(response, "Hello from Rust core!");
-        lindos_result_free(result);
+        free_result(result);
 
         // Test whitespace-only string
         let whitespace_str = CString::new("   \n\t  ").unwrap();
@@ -362,20 +374,20 @@ mod tests {
         assert!(result.success);
         let response = unsafe { CStr::from_ptr(result.data).to_str().unwrap() };
         assert_eq!(response, "Hello from Rust core!");
-        lindos_result_free(result);
+        free_result(result);
 
         // Test exactly at limit (1000 characters)
         let limit_str = CString::new("a".repeat(1000)).unwrap();
         let result = lindos_process_message_safe(limit_str.as_ptr());
         assert!(result.success);
-        lindos_result_free(result);
+        free_result(result);
 
         // Test just over limit (1001 characters)
         let over_limit_str = CString::new("a".repeat(1001)).unwrap();
         let result = lindos_process_message_safe(over_limit_str.as_ptr());
         assert!(!result.success);
         assert_eq!(result.error_code, 4);
-        lindos_result_free(result);
+        free_result(result);
     }
 
     #[test]
@@ -386,13 +398,13 @@ mod tests {
         assert!(result.success);
         let response = unsafe { CStr::from_ptr(result.data).to_str().unwrap() };
         assert!(response.contains("Hello 🌍 世界 🚀"));
-        lindos_result_free(result);
+        free_result(result);
 
         // Test emoji-heavy string
         let emoji_str = CString::new("🎉🎈🎊🎁🎀").unwrap();
         let result = lindos_process_message_safe(emoji_str.as_ptr());
         assert!(result.success);
-        lindos_result_free(result);
+        free_result(result);
     }
 
     #[test]
@@ -406,7 +418,7 @@ mod tests {
                     let test_str = CString::new(format!("test message {}", i)).unwrap();
                     let result = lindos_process_message_safe(test_str.as_ptr());
                     assert!(result.success);
-                    lindos_result_free(result);
+                    free_result(result);
                 })
             })
             .collect();
@@ -426,7 +438,7 @@ mod tests {
         let response = unsafe { CStr::from_ptr(result).to_str().unwrap() };
         assert_eq!(response, "You said: legacy test");
 
-        lindos_string_free(result);
+        free_string(result);
     }
 
     #[test]
@@ -439,7 +451,7 @@ mod tests {
         assert!(!result.data.is_null());
         assert_eq!(result.error_code, 0);
 
-        lindos_result_free(result);
+        free_result(result);
 
         // Test error case structure
         let result_error = lindos_process_message_safe(std::ptr::null());
@@ -447,6 +459,6 @@ mod tests {
         assert!(!result_error.data.is_null()); // Should contain error message
         assert_eq!(result_error.error_code, 1);
 
-        lindos_result_free(result_error);
+        free_result(result_error);
     }
 }

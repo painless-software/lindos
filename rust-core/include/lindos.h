@@ -63,6 +63,11 @@ void lindos_string_free(char *ptr);
 
 /**
  * Free a RustResult structure and its associated memory
+ *
+ * # Safety
+ * This function is safe to call as long as:
+ * - The result was returned by a function from this library
+ * - The result is freed exactly once
  */
 void lindos_result_free(struct RustResult result);
 

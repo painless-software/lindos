@@ -32,25 +32,13 @@ runs linting, tests and code coverage.
 
 ### Prerequisites
 
-- macOS with Xcode (including the command-line tools) for the tray app build
-- Rust toolchain with `cargo` (install via [rustup](https://rustup.rs/))
+- Just (see above for installation)
+- Rust toolchain with `cargo` - _install via `just setup-rust`_
+- Python's `uv` for running just commands for GNOME - _install via `just setup-python`_
+- macOS with Xcode (including command-line tools) - _macOS development only_
+- A Linux distro with a modern GNOME desktop (GTK3) - _GNOME development only_
 
-### Build and Run
+### Swift Tests - First Time Setup
 
-```bash
-# Build Rust + macOS app
-./scripts/build_macos.sh debug
-```
-
-Or open `macos/LindosTrayApp/LindosTrayApp.xcodeproj` and hit Run in Xcode.
-
-## Development
-
-For detailed development instructions, testing, and contributing guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
-
-### Quick Links
-
-- [Development Setup](CONTRIBUTING.md#development-setup)
-- [Running Tests](CONTRIBUTING.md#running-tests)
-- [Code Linting](CONTRIBUTING.md#code-quality-and-linting)
-- [Submitting Changes](CONTRIBUTING.md#submitting-changes)
+If you're setting up Swift tests for the first time, you'll need to add the test target to Xcode.
+See [macos/XCODE_TEST_SETUP.md](macos/XCODE_TEST_SETUP.md) for detailed instructions.

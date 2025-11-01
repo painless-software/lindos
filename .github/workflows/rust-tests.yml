@@ -1,0 +1,92 @@
+name: Rust Tests
+
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - 'rust-core/**'
+    - '.github/workflows/rust-tests.yml'
+  pull_request:
+    branches:
+    - main
+    paths:
+    - 'rust-core/**'
+    - '.github/workflows/rust-tests.yml'
+
+jobs:
+  check:
+    name: ${{ matrix.check }} (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+        - macos-latest
+        - ubuntu-latest
+        check:
+        - clippy
+        - coverage
+        - fmt
+        - test
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Rust components
+      run: |
+        rustup toolchain install stable --profile minimal
+        rustup default stable
+        if [ "${{ matrix.check }}" = "clippy" ]; then
+          rustup component add clippy
+        elif [ "${{ matrix.check }}" = "fmt" ]; then
+          rustup component add rustfmt
+        elif [ "${{ matrix.check }}" = "coverage" ]; then
+          rustup component add llvm-tools-preview
+        fi
+      shell: bash
+
+    - name: Install cargo-llvm-cov
+      if: matrix.check == 'coverage'
+      uses: taiki-e/install-action@v2
+      with:
+        tool: cargo-llvm-cov
+
+    - name: Cache cargo dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          rust-core/target
+        key: ${{ runner.os }}-cargo-${{ matrix.check }}-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-${{ matrix.check }}-
+          ${{ runner.os }}-cargo-
+
+    - name: Run Clippy
+      if: matrix.check == 'clippy'
+      working-directory: rust-core
+      run: cargo clippy --all-targets --all-features -- -D warnings
+
+    - name: Check formatting
+      if: matrix.check == 'fmt'
+      working-directory: rust-core
+      run: cargo fmt --check
+
+    - name: Run tests
+      if: matrix.check == 'test'
+      working-directory: rust-core
+      run: cargo test --verbose
+
+    - name: Generate code coverage
+      if: matrix.check == 'coverage'
+      working-directory: rust-core
+      run: cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
+
+    - name: Upload coverage to Codecov
+      if: matrix.check == 'coverage'
+      uses: codecov/codecov-action@v5
+      with:
+        files: rust-core/lcov.info
+        fail_ci_if_error: false
+        token: ${{ secrets.CODECOV_TOKEN }}

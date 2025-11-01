@@ -11,10 +11,6 @@ final class AppDelegateTests: XCTestCase {
         appDelegate = AppDelegate()
     }
 
-    override func tearDown() {
-        super.tearDown()
-    }
-
     // MARK: - Initialization Tests
 
     func testAppDelegateInitialization() {

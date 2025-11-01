@@ -2,6 +2,11 @@
 target/
 **/*.rs.bk
 
+# Code coverage reports
+.coverage
+*.lcov
+lcov.info
+
 # Xcode derived data
 build/
 xcuserdata/
@@ -15,3 +20,4 @@ __pycache__/
 *$py.class
 *.so
 .Python
+.venv

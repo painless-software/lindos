@@ -4,9 +4,8 @@ import Combine
 
 /// Tests for ChatViewModel logic and state management
 final class ChatViewModelTests: XCTestCase {
-
-    var viewModel: ChatViewModel!
-    var cancellables: Set<AnyCancellable>!
+    private var viewModel = ChatViewModel()
+    private var cancellables = Set<AnyCancellable>()
 
     override func setUp() {
         super.setUp()
@@ -15,8 +14,7 @@ final class ChatViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        cancellables = nil
-        viewModel = nil
+        cancellables.removeAll()
         super.tearDown()
     }
 

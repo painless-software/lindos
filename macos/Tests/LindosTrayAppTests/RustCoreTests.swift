@@ -3,7 +3,6 @@ import XCTest
 
 /// Tests for RustCore error handling and processing
 final class RustCoreTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Enable debug mode for tests

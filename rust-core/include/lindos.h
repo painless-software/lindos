@@ -73,4 +73,4 @@ void lindos_result_free(struct RustResult result);
 
 void lindos_set_debug(bool enabled);
 
-#endif /* LINDOS_H */
+#endif  /* LINDOS_H */

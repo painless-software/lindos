@@ -8,8 +8,9 @@ from rust_core import RustCore
 
 
 class LindosTrayApp(Gtk.Window):
+    """A borderless window with a text box that reacts on key strokes."""
+
     def __init__(self):
-        """A borderless window with a text box that reacts on key strokes."""
         super().__init__(title=None)
         self.set_decorated(False)  # no title bar and borders
         self.set_default_size(300, 100)
@@ -33,7 +34,8 @@ class LindosTrayApp(Gtk.Window):
         elif theme == "Dark":
             print("Dark theme detected")
         else:
-            raise NotImplementedError(f"Unsupported theme '{theme}'")
+            msg = f"Unsupported theme '{theme}'"
+            raise NotImplementedError(msg)
 
     def on_text_changed(self, widget):
         """Get the current text from the entry."""
@@ -44,9 +46,9 @@ class LindosTrayApp(Gtk.Window):
         """Call the Rust core library to process the text."""
         if not text:
             return  # Don't process empty text
-        
+
         result, error = RustCore.process_with_result(text)
-        
+
         if error:
             print(f"Error processing message: {error.message}")
         else:

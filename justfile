@@ -21,20 +21,20 @@
 setup-rust:
     #!/usr/bin/env bash
     set -euo pipefail
-    if ! command -v rustup >/dev/null 2>&1; then
-        echo "Installing Rust via rustup..."
-        # Note: Using official rustup installation method as documented at https://rustup.rs/
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        source "$HOME/.cargo/env"
+    if command -v cargo >/dev/null && command -v rustc >/dev/null; then
+        echo "Rust already installed (cargo, rustc found) ✓"
+    else
+        if ! command -v rustup >/dev/null; then
+            echo "Installing Rust via rustup..."
+            # Note: Using official rustup installation method as documented at https://rustup.rs/
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+            source "$HOME/.cargo/env"
+        fi
+        rustup toolchain install stable --profile minimal
     fi
-    rustup toolchain install stable --profile minimal
     rustup default stable
     rustup component add clippy rustfmt llvm-tools-preview
-
-# Install cargo-llvm-cov for code coverage
-[group('setup')]
-setup-coverage:
-    cargo install cargo-llvm-cov
+    hash -r
 
 # Install Swift development prerequisites (macOS only)
 [group('setup')]
@@ -50,7 +50,12 @@ setup-swift:
         echo "  xcode-select --install"
         exit 1
     fi
-    echo "Xcode tools are already installed ✓"
+    if ! command -v swiftlint >/dev/null 2>&1; then
+        echo "Installing SwiftLint..."
+        brew install swiftlint
+    fi
+    echo "Xcode tools are installed ✓"
+    echo "SwiftLint is installed ✓"
 
 # Setup GNOME development environment (NixOS only)
 [group('setup')]
@@ -63,7 +68,7 @@ setup-gnome:
         exit 1
     fi
     echo "Setting up GNOME development environment..."
-    nix develop -c $SHELL
+    nix develop -c ${SHELL}
 
 # Install Python development tools (uv)
 [group('setup')]
@@ -152,7 +157,7 @@ ruff-lint *args:
 ruff-format *args:
     uvx ruff format --check {{args}}
 
-# Format Python code with ruff (in-place)
+# Apply Python code formatting changes with ruff
 [group('gnome')]
 [working-directory: 'gnome']
 ruff-reformat:
@@ -165,7 +170,7 @@ run-gnome: (build "--release")
     python LindosTrayApp/app.py
 
 # ============================================================================
-# macOS Build
+# macOS - Build, Testing, Quality Assurance
 # ============================================================================
 
 # Build Rust library and macOS app with debug symbols
@@ -184,6 +189,20 @@ xcodebuild config='Debug':
       -scheme LindosTrayApp \
       -configuration {{config}}
 
+# Run Swift tests with code coverage
+[group('macos')]
+test-swift:
+    xcodebuild test \
+      -project macos/LindosTrayApp/LindosTrayApp.xcodeproj \
+      -scheme LindosTrayApp \
+      -destination 'platform=macOS' \
+      -enableCodeCoverage YES
+
+# Check Swift code quality (use --strict for warnings, --fix to auto-fix)
+[group('macos')]
+swiftlint *args:
+    swiftlint lint {{args}}
+
 # ============================================================================
 # All-in-One Commands
 # ============================================================================
@@ -196,9 +215,13 @@ check-rust: clippy fmt-check test
 [group('all')]
 check-python: ruff-lint ruff-format pytest
 
-# Run all checks (Rust + Python)
+# Run all Swift checks (swiftlint, test)
 [group('all')]
-check-all: check-rust check-python
+check-swift: (swiftlint "--strict") test-swift
+
+# Run all checks (Rust + Python + Swift)
+[group('all')]
+check-all: check-rust check-python check-swift
 
 # ============================================================================
 # Lifecycle & Utilities

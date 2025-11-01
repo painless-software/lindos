@@ -25,7 +25,7 @@ struct TrayChatView: View {
                     if viewModel.isThinking {
                         HStack(spacing: 4) {
                             ProgressView()
-                                .scaleEffect(0.6) 
+                                .scaleEffect(0.6)
                             Text("Thinking")
                                 .font(.system(.caption2, design: .rounded))
                                 .foregroundStyle(.secondary)

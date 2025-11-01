@@ -43,10 +43,8 @@ class LindosTrayApp(Gtk.Window):
     def call_external_library(self, text):
         """Call the Rust core library to process the text."""
         if not text:
-            # Don't process empty text
-            return
+            return  # Don't process empty text
         
-        # Process the message using Rust core
         result, error = RustCore.process_with_result(text)
         
         if error:

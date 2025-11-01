@@ -9,8 +9,8 @@
       default = nixpkgs.legacyPackages.${system}.mkShell {
         # shellHook = "exec /run/current-system/sw/bin/zsh";
         buildInputs = with nixpkgs.legacyPackages.${system}; [
-          gtk3
           cargo
+          gtk3
           rustc
         ] ++ (with python313Packages; [
           darkdetect

@@ -10,7 +10,7 @@
         # shellHook = "exec /run/current-system/sw/bin/zsh";
         buildInputs = with nixpkgs.legacyPackages.${system}; [
           cargo
-          gtk3
+          gtk4
           rustc
         ] ++ (with python313Packages; [
           darkdetect

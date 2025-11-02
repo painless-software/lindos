@@ -161,7 +161,7 @@ ruff-reformat:
 [group('gnome')]
 [working-directory: 'gnome']
 run-gnome: (build "--release")
-    python lindos/app.py
+    python -m lindos
 
 # ============================================================================
 # macOS Build

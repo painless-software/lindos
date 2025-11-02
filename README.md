@@ -2,9 +2,14 @@
 
 Your friendly desktop assistant. A tray icon for tedious chores and lovely conversations.
 
-## Quick Start
+## Development
 
-This project uses [Just][just] for common development tasks. Install it first:
+This project is hosted on GitHub. Code changes will trigger a GHA pipeline,
+which runs linting, tests and code coverage.
+
+### Quick Start
+
+We use [Just][just] for common development tasks. Install it first:
 
 ```bash
 # macOS
@@ -25,7 +30,10 @@ just
 
 [just]: https://just.systems/man/en/
 
-## Development
+### Prerequisites
 
-This code is hosted on GitHub. Code changes will trigger a GHA pipeline, which
-runs linting, tests and code coverage.
+- Just (see above for installation)
+- Rust toolchain with `cargo` - _run `just setup-rust`_
+- Python's `uv` for running just commands for GNOME - _run `just setup-python`_
+- macOS: Xcode (including command-line tools) - _run `just setup-swift`_
+- Linux: A distro with a modern GNOME desktop - _run `just setup-gnome`_

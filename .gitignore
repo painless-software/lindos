@@ -20,4 +20,6 @@ __pycache__/
 *$py.class
 *.so
 .Python
-.venv
+.venv/
+*.egg-info/
+.pytest_cache/

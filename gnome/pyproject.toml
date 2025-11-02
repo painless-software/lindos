@@ -1,3 +1,25 @@
+[project]
+name = "lindos-tray-app"
+dynamic = ["version"]
+description = "Lindos Tray App"
+readme = "README.md"
+dependencies = [
+  "darkdetect",
+  # "gi" must be provided by the system's GTK 4
+]
+
+[project.scripts]
+"lindos-tray-app" = "lindos.app:main"
+
+[tool.coverage.report]
+exclude_also = ["if __name__ == .__main__.:"]
+show_missing = true
+skip_covered = false
+
+[tool.coverage.run]
+source = ["lindos"]
+omit = ["/nix/store/*"]
+
 [tool.ruff.lint]
 extend-select = ["EM", "TRY", "UP"]
 extend-ignore = ["E402"]

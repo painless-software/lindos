@@ -6,7 +6,9 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-# Add LindosTrayApp to the path
+# Add LindosTrayApp to the path for testing purposes.
+# This allows tests to import the modules without requiring proper package structure.
+# In production, LindosTrayApp would be properly structured as a package.
 sys.path.insert(0, str(Path(__file__).parent.parent / "LindosTrayApp"))
 
 # Import the actual classes to test
@@ -217,7 +219,18 @@ class TestRustCore:
 
     def test_library_loaded_once(self):
         """Test that library is only loaded once."""
-        with patch.object(RustCore, "_lib", MagicMock()):
+        # Save the original state
+        original_lib = RustCore._lib
+        
+        try:
+            # Set a mock library
+            mock_lib = MagicMock()
+            RustCore._lib = mock_lib
+            
             lib1 = RustCore._load_library()
             lib2 = RustCore._load_library()
             assert lib1 is lib2
+            assert lib1 is mock_lib
+        finally:
+            # Restore original state
+            RustCore._lib = original_lib

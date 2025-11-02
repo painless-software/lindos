@@ -78,8 +78,8 @@ jobs:
       working-directory: gnome
       run: |
         uvx --with pytest coverage run -m pytest --doctest-modules
-        uvx coverage report --omit '/nix/store/*'
-        uvx coverage lcov --omit '/nix/store/*' -o coverage.lcov
+        uvx coverage report --omit tests/*
+        uvx coverage lcov --omit tests/* -o coverage.lcov
 
     - name: Upload coverage to Codecov
       if: matrix.check == 'pytest'

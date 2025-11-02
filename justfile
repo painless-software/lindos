@@ -21,20 +21,20 @@
 setup-rust:
     #!/usr/bin/env bash
     set -euo pipefail
-    if ! command -v rustup >/dev/null 2>&1; then
-        echo "Installing Rust via rustup..."
-        # Note: Using official rustup installation method as documented at https://rustup.rs/
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        source "$HOME/.cargo/env"
+    if command -v cargo >/dev/null && command -v rustc >/dev/null; then
+        echo "Rust already installed (cargo, rustc found) ✓"
+    else
+        if ! command -v rustup >/dev/null; then
+            echo "Installing Rust via rustup..."
+            # Note: Using official rustup installation method as documented at https://rustup.rs/
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+            source "$HOME/.cargo/env"
+        fi
+        rustup toolchain install stable --profile minimal
     fi
-    rustup toolchain install stable --profile minimal
     rustup default stable
     rustup component add clippy rustfmt llvm-tools-preview
-
-# Install cargo-llvm-cov for code coverage
-[group('setup')]
-setup-coverage:
-    cargo install cargo-llvm-cov
+    hash -r
 
 # Install Swift development prerequisites (macOS only)
 [group('setup')]
@@ -63,7 +63,7 @@ setup-gnome:
         exit 1
     fi
     echo "Setting up GNOME development environment..."
-    nix develop -c $SHELL
+    nix develop -c ${SHELL}
 
 # Install Python development tools (uv)
 [group('setup')]
@@ -152,7 +152,7 @@ ruff-lint *args:
 ruff-format *args:
     uvx ruff format --check {{args}}
 
-# Format Python code with ruff (in-place)
+# Apply Python code formatting changes with ruff
 [group('gnome')]
 [working-directory: 'gnome']
 ruff-reformat:

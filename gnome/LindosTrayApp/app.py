@@ -2,7 +2,7 @@ import darkdetect
 import gi
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk
+from gi.repository import GLib, Gdk, Gtk
 
 from rust_core import RustCore
 
@@ -11,7 +11,8 @@ class LindosTrayApp(Gtk.Window):
     """A borderless window with a text box that reacts on key strokes."""
 
     def __init__(self):
-        super().__init__(title=None)
+        super().__init__()
+        GLib.set_application_name("Lindos Desktop Assistant")
         self.set_decorated(False)  # no title bar and borders
         self.set_default_size(300, 100)
 

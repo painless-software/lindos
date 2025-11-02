@@ -221,12 +221,12 @@ class TestRustCore:
         """Test that library is only loaded once."""
         # Save the original state
         original_lib = RustCore._lib
-        
+
         try:
             # Set a mock library
             mock_lib = MagicMock()
             RustCore._lib = mock_lib
-            
+
             lib1 = RustCore._load_library()
             lib2 = RustCore._load_library()
             assert lib1 is lib2

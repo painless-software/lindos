@@ -1,0 +1,37 @@
+---
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v6.0.0
+  hooks:
+  - id: check-added-large-files
+  - id: check-yaml
+  - id: end-of-file-fixer
+  - id: trailing-whitespace
+- repo: https://github.com/gitleaks/gitleaks
+  rev: v8.28.0
+  hooks:
+  - id: gitleaks
+- repo: https://github.com/jackdewinter/pymarkdown
+  rev: v0.9.33
+  hooks:
+  - id: pymarkdown
+- repo: local
+  hooks:
+  - id: ruff-lint
+    name: Python code style
+    language: system
+    entry: just
+    args: [ruff-lint]
+    pass_filenames: false
+  - id: ruff-format
+    name: Python code formatting
+    language: system
+    entry: just
+    args: [ruff-format, --diff]
+    pass_filenames: false
+  - id: rust-fmt
+    name: Rust code formatting
+    language: system
+    entry: just
+    args: [fmt-check]
+    pass_filenames: false

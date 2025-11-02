@@ -1,18 +1,14 @@
+# macOS metadata
+.DS_Store
+
 # Rust build output
 target/
 **/*.rs.bk
 
 # Code coverage reports
-.coverage
+*.coverage
 *.lcov
 lcov.info
-
-# Xcode derived data
-build/
-xcuserdata/
-
-# macOS metadata
-.DS_Store
 
 # Python
 __pycache__/
@@ -23,3 +19,13 @@ __pycache__/
 .venv/
 *.egg-info/
 .pytest_cache/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Xcode derived data
+build/
+xcuserdata/
+DerivedData/
+*.xcresult

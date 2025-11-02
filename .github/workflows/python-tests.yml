@@ -18,6 +18,8 @@ jobs:
   check:
     name: ${{ matrix.check }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
         check:

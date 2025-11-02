@@ -5,15 +5,6 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-# Mock gi, darkdetect and GTK modules before any imports
-sys.modules["darkdetect"] = MagicMock()
-sys.modules["darkdetect"].theme = MagicMock(return_value="Light")
-
-# Create proper mock for gi module
-mock_gi = MagicMock()
-mock_gdk = MagicMock()
-mock_gtk = MagicMock()
-
 
 # Setup Gtk mock with ApplicationWindow as a class that returns a proper mock
 class MockApplicationWindow:
@@ -39,9 +30,13 @@ class MockApplicationWindow:
         pass
 
 
+# Create proper mock for gi module
+mock_gi = MagicMock()
+mock_gdk = MagicMock()
+mock_gtk = MagicMock()
+
 mock_gtk.ApplicationWindow = MockApplicationWindow
 
-# Setup repository mocks
 mock_gi.repository.Gdk = mock_gdk
 mock_gi.repository.Gtk = mock_gtk
 
@@ -51,15 +46,15 @@ sys.modules["gi.repository.Gdk"] = mock_gdk
 sys.modules["gi.repository.Gtk"] = mock_gtk
 
 # Now we can import the app module
-from LindosTrayApp.app import APP_ID, LindosTrayApp, main
+from lindos.app import APP_ID, LindosTrayApp, main
 
 
 @pytest.fixture
 def mock_gtk_widgets():
     """Fixture to mock GTK widgets."""
-    with patch("LindosTrayApp.app.Gtk.Entry") as mock_entry_class:
-        with patch("LindosTrayApp.app.Gtk.Box") as mock_box_class:
-            with patch("LindosTrayApp.app.Gtk.EventControllerKey") as mock_ctrl_class:
+    with patch("lindos.app.Gtk.Entry") as mock_entry_class:
+        with patch("lindos.app.Gtk.Box") as mock_box_class:
+            with patch("lindos.app.Gtk.EventControllerKey") as mock_ctrl_class:
                 mock_entry = MagicMock()
                 mock_box = MagicMock()
                 mock_ctrl = MagicMock()
@@ -87,7 +82,7 @@ def test_lindos_tray_app_can_be_instantiated(mock_gtk_widgets):
     """Test that LindosTrayApp can be instantiated with a Gtk Application."""
     mock_app = MagicMock()
 
-    with patch("LindosTrayApp.app.darkdetect.theme", return_value="Light"):
+    with patch("lindos.app.darkdetect.theme", return_value="Light"):
         window = LindosTrayApp(mock_app)
         assert window is not None
 
@@ -96,7 +91,7 @@ def test_apply_theme_light(mock_gtk_widgets):
     """Test apply_theme with Light theme."""
     mock_app = MagicMock()
 
-    with patch("LindosTrayApp.app.darkdetect.theme", return_value="Light"):
+    with patch("lindos.app.darkdetect.theme", return_value="Light"):
         window = LindosTrayApp(mock_app)
 
         with patch("builtins.print") as mock_print:
@@ -108,7 +103,7 @@ def test_apply_theme_dark(mock_gtk_widgets):
     """Test apply_theme with Dark theme."""
     mock_app = MagicMock()
 
-    with patch("LindosTrayApp.app.darkdetect.theme", return_value="Dark"):
+    with patch("lindos.app.darkdetect.theme", return_value="Dark"):
         window = LindosTrayApp(mock_app)
 
         with patch("builtins.print") as mock_print:
@@ -120,7 +115,7 @@ def test_apply_theme_unsupported_raises_error(mock_gtk_widgets):
     """Test apply_theme with unsupported theme raises NotImplementedError."""
     mock_app = MagicMock()
 
-    with patch("LindosTrayApp.app.darkdetect.theme", return_value="Light"):
+    with patch("lindos.app.darkdetect.theme", return_value="Light"):
         window = LindosTrayApp(mock_app)
 
         with pytest.raises(NotImplementedError, match="Unsupported theme"):
@@ -131,7 +126,7 @@ def test_on_text_changed_calls_external_library(mock_gtk_widgets):
     """Test that on_text_changed handler calls external library."""
     mock_app = MagicMock()
 
-    with patch("LindosTrayApp.app.darkdetect.theme", return_value="Light"):
+    with patch("lindos.app.darkdetect.theme", return_value="Light"):
         window = LindosTrayApp(mock_app)
 
         mock_widget = MagicMock()
@@ -146,8 +141,8 @@ def test_call_external_library_with_empty_text(mock_gtk_widgets):
     """Test call_external_library with empty text doesn't call Rust."""
     mock_app = MagicMock()
 
-    with patch("LindosTrayApp.app.darkdetect.theme", return_value="Light"):
-        with patch("LindosTrayApp.app.RustCore") as mock_rust:
+    with patch("lindos.app.darkdetect.theme", return_value="Light"):
+        with patch("lindos.app.RustCore") as mock_rust:
             window = LindosTrayApp(mock_app)
             window.call_external_library("")
             mock_rust.process_with_result.assert_not_called()
@@ -157,8 +152,8 @@ def test_call_external_library_success(mock_gtk_widgets):
     """Test call_external_library with successful processing."""
     mock_app = MagicMock()
 
-    with patch("LindosTrayApp.app.darkdetect.theme", return_value="Light"):
-        with patch("LindosTrayApp.app.RustCore") as mock_rust:
+    with patch("lindos.app.darkdetect.theme", return_value="Light"):
+        with patch("lindos.app.RustCore") as mock_rust:
             mock_rust.process_with_result.return_value = ("result text", None)
 
             window = LindosTrayApp(mock_app)
@@ -173,8 +168,8 @@ def test_call_external_library_with_error(mock_gtk_widgets):
     """Test call_external_library with error."""
     mock_app = MagicMock()
 
-    with patch("LindosTrayApp.app.darkdetect.theme", return_value="Light"):
-        with patch("LindosTrayApp.app.RustCore") as mock_rust:
+    with patch("lindos.app.darkdetect.theme", return_value="Light"):
+        with patch("lindos.app.RustCore") as mock_rust:
             mock_error = MagicMock()
             mock_error.message = "Error occurred"
             mock_rust.process_with_result.return_value = (None, mock_error)
@@ -191,14 +186,14 @@ def test_call_external_library_with_error(mock_gtk_widgets):
 
 def test_on_key_press_escape_closes_window(mock_gtk_widgets):
     """Test on_key_press with Escape key closes window."""
-    from LindosTrayApp.app import Gdk
+    from lindos.app import Gdk
 
     Gdk.KEY_Escape = 65307
     Gdk.ModifierType.NO_MODIFIER_MASK = 0
 
     mock_app = MagicMock()
 
-    with patch("LindosTrayApp.app.darkdetect.theme", return_value="Light"):
+    with patch("lindos.app.darkdetect.theme", return_value="Light"):
         window = LindosTrayApp(mock_app)
 
         with patch.object(window, "close") as mock_close:
@@ -208,14 +203,14 @@ def test_on_key_press_escape_closes_window(mock_gtk_widgets):
 
 def test_on_key_press_ctrl_q_closes_window(mock_gtk_widgets):
     """Test on_key_press with Ctrl+Q closes window."""
-    from LindosTrayApp.app import Gdk
+    from lindos.app import Gdk
 
     Gdk.KEY_q = 113
     Gdk.ModifierType.CONTROL_MASK = 4
 
     mock_app = MagicMock()
 
-    with patch("LindosTrayApp.app.darkdetect.theme", return_value="Light"):
+    with patch("lindos.app.darkdetect.theme", return_value="Light"):
         window = LindosTrayApp(mock_app)
 
         with patch.object(window, "close") as mock_close:
@@ -225,7 +220,7 @@ def test_on_key_press_ctrl_q_closes_window(mock_gtk_widgets):
 
 def test_main_creates_and_runs_application():
     """Test that main function creates and runs the GTK application successfully."""
-    with patch("LindosTrayApp.app.Gtk.Application") as mock_gtk_app_class:
+    with patch("lindos.app.Gtk.Application") as mock_gtk_app_class:
         mock_app = MagicMock()
         mock_gtk_app_class.return_value = mock_app
 
@@ -244,8 +239,8 @@ def test_main_creates_and_runs_application():
 
 def test_main_activate_callback_creates_and_shows_window():
     """Test that the activate callback creates and presents window successfully."""
-    with patch("LindosTrayApp.app.Gtk.Application") as mock_gtk_app_class:
-        with patch("LindosTrayApp.app.LindosTrayApp") as mock_window_class:
+    with patch("lindos.app.Gtk.Application") as mock_gtk_app_class:
+        with patch("lindos.app.LindosTrayApp") as mock_window_class:
             mock_app = MagicMock()
             mock_gtk_app_class.return_value = mock_app
             mock_window = MagicMock()

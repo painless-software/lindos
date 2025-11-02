@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from LindosTrayApp.rust_core import ProcessingError, RustCore, RustResult
+from lindos.rust_core import ProcessingError, RustCore, RustResult
 
 
 def test_processing_error_with_code():

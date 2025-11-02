@@ -137,8 +137,7 @@ fmt:
 [group('gnome')]
 [working-directory: 'gnome']
 pytest *args:
-    uvx --with pytest coverage run -m pytest --doctest-modules {{args}}
-    uvx coverage report --omit '/nix/store/*'
+    uvx --with tox-uv tox -- {{args}}
 
 # Run ruff linter on Python code (use --fix to apply changes)
 [group('gnome')]
@@ -162,7 +161,7 @@ ruff-reformat:
 [group('gnome')]
 [working-directory: 'gnome']
 run-gnome: (build "--release")
-    python LindosTrayApp/app.py
+    python lindos/app.py
 
 # ============================================================================
 # macOS Build

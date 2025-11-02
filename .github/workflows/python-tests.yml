@@ -33,7 +33,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
+        python-version: '3.13'
 
     - name: Install uv
       run: |
@@ -77,9 +77,8 @@ jobs:
       if: matrix.check == 'pytest'
       working-directory: gnome
       run: |
-        uvx --with pytest coverage run -m pytest --doctest-modules
-        uvx coverage report --omit tests/*
-        uvx coverage lcov --omit tests/* -o coverage.lcov
+        uvx --with tox-uv tox -- -v
+        uvx coverage lcov -o coverage.lcov
 
     - name: Upload coverage to Codecov
       if: matrix.check == 'pytest'

@@ -1,25 +1,20 @@
-name: Swift Tests
+name: Swift
 
 on:
-  pull_request:
-    branches:
-    - main
-    paths:
-    - '.github/workflows/swift-tests.yml'
-    - '.swiftlint.yml'
-    - 'macos/**/*.swift'
   push:
     branches:
     - main
     paths:
-    - '.github/workflows/swift-tests.yml'
-    - '.swiftlint.yml'
     - 'macos/**/*.swift'
-  workflow_dispatch:
-
-permissions:
-  actions: read
-  contents: read
+    - '.swiftlint.yml'
+    - '.github/workflows/swift-tests.yml'
+  pull_request:
+    branches:
+    - main
+    paths:
+    - 'macos/**/*.swift'
+    - '.swiftlint.yml'
+    - '.github/workflows/swift-tests.yml'
 
 jobs:
   lint:

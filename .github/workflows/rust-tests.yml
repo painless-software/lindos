@@ -25,31 +25,26 @@ jobs:
         - ubuntu-latest
         check:
         - clippy
-        - coverage
         - fmt
         - test
+        - coverage-lcov
 
     steps:
     - uses: actions/checkout@v5
 
-    - name: Install Rust components
-      run: |
-        rustup toolchain install stable --profile minimal
-        rustup default stable
-        if [ "${{ matrix.check }}" = "clippy" ]; then
-          rustup component add clippy
-        elif [ "${{ matrix.check }}" = "fmt" ]; then
-          rustup component add rustfmt
-        elif [ "${{ matrix.check }}" = "coverage" ]; then
-          rustup component add llvm-tools-preview
-        fi
-      shell: bash
+    - name: Install development tools (just)
+      uses: taiki-e/install-action@v2
+      with:
+        tool: just
 
-    - name: Install cargo-llvm-cov
-      if: matrix.check == 'coverage'
+    - name: Install cargo-llvm-cov (faster)
+      if: matrix.check == 'coverage-lcov'
       uses: taiki-e/install-action@v2
       with:
         tool: cargo-llvm-cov
+
+    - name: Install Rust components
+      run: just setup-rust
 
     - name: Cache cargo dependencies
       uses: actions/cache@v4
@@ -65,26 +60,23 @@ jobs:
 
     - name: Run Clippy
       if: matrix.check == 'clippy'
-      working-directory: rust-core
-      run: cargo clippy --all-targets --all-features -- -D warnings
+      run: just ${{ matrix.check }}
 
-    - name: Check formatting
+    - name: Check Rust code formatting
       if: matrix.check == 'fmt'
-      working-directory: rust-core
-      run: cargo fmt --check
+      run: just ${{ matrix.check }}
 
     - name: Run tests
       if: matrix.check == 'test'
-      working-directory: rust-core
-      run: cargo test --verbose
+      run: just ${{ matrix.check }} -v
 
     - name: Generate code coverage
-      if: matrix.check == 'coverage'
+      if: matrix.check == 'coverage-lcov'
       working-directory: rust-core
-      run: cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
+      run: just ${{ matrix.check }}
 
     - name: Upload coverage to Codecov
-      if: matrix.check == 'coverage'
+      if: matrix.check == 'coverage-lcov'
       uses: codecov/codecov-action@v5
       with:
         files: rust-core/lcov.info

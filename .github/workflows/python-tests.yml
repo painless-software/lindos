@@ -30,7 +30,7 @@ jobs:
         - pytest
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Install Gtk4 dependencies
       if: matrix.check == 'pytest' && false  # disable temporarily

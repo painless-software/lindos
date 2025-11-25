@@ -195,6 +195,7 @@ test-swift:
       -project macos/LindosTrayApp/LindosTrayApp.xcodeproj \
       -scheme LindosTrayApp \
       -destination 'platform=macOS' \
+      -derivedDataPath build/DerivedData \
       -enableCodeCoverage YES
 
 # Check Swift code quality (use --strict for warnings, --fix to auto-fix)

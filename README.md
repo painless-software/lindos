@@ -38,7 +38,6 @@ just
 - macOS: Xcode (including command-line tools) - _run `just setup-swift`_
 - Linux: A distro with a modern GNOME desktop - _run `just setup-gnome`_
 
-### Swift Tests - First Time Setup
+### Swift Tests
 
-If you're setting up Swift tests for the first time, you'll need to add the test target to Xcode.
-See [macos/XCODE_TEST_SETUP.md](macos/XCODE_TEST_SETUP.md) for detailed instructions.
+The Xcode project already contains the `LindosTrayAppTests` target. Run them locally with `just test-swift` or from Xcode using the shared **LindosTrayApp** scheme.

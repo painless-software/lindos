@@ -5,7 +5,7 @@ import os.log
 enum RustCore {
 
     /// Errors that can occur during Rust processing
-    enum ProcessingError: Error, LocalizedError {
+    enum ProcessingError: Error, LocalizedError, Equatable {
         case nullPointer
         case invalidUtf8
         case emptyMessage
@@ -68,6 +68,11 @@ enum RustCore {
 
     /// Validate a message without processing it
     static func validate(message: String) -> ProcessingError? {
+        // Short-circuit empty/whitespace input to avoid calling into Rust for a known condition
+        if message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return .emptyMessage
+        }
+
         guard let cString = message.cString(using: .utf8) else {
             return .invalidUtf8
         }

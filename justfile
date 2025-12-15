@@ -133,7 +133,7 @@ fmt:
 # Python/GNOME - Testing, Coverage, Quality Assurance
 # ============================================================================
 
-# Run pytest with optional arguments (use -v for verbose)
+# Run pytest with optional arguments (use -v for verbose, -s to debug)
 [group('gnome')]
 [working-directory: 'gnome']
 pytest *args:

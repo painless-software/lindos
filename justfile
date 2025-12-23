@@ -50,7 +50,12 @@ setup-swift:
         echo "  xcode-select --install"
         exit 1
     fi
-    echo "Xcode tools are already installed ✓"
+    if ! command -v swiftlint >/dev/null 2>&1; then
+        echo "Installing SwiftLint..."
+        brew install swiftlint
+    fi
+    echo "Xcode tools are installed ✓"
+    echo "SwiftLint is installed ✓"
 
 # Setup GNOME development environment (NixOS only)
 [group('setup')]
@@ -164,7 +169,7 @@ run-gnome: (build "--release")
     python -m lindos
 
 # ============================================================================
-# macOS Build
+# macOS - Build, Testing, Quality Assurance
 # ============================================================================
 
 # Build Rust library and macOS app with debug symbols
@@ -183,6 +188,21 @@ xcodebuild config='Debug':
       -scheme LindosTrayApp \
       -configuration {{config}}
 
+# Run Swift tests with code coverage
+[group('macos')]
+test-swift:
+    xcodebuild test \
+      -project macos/LindosTrayApp/LindosTrayApp.xcodeproj \
+      -scheme LindosTrayApp \
+      -destination 'platform=macOS' \
+      -derivedDataPath build/DerivedData \
+      -enableCodeCoverage YES
+
+# Check Swift code quality (use --strict for warnings, --fix to auto-fix)
+[group('macos')]
+swiftlint *args:
+    swiftlint lint {{args}}
+
 # ============================================================================
 # All-in-One Commands
 # ============================================================================
@@ -195,9 +215,13 @@ check-rust: clippy fmt-check test
 [group('all')]
 check-python: ruff-lint ruff-format pytest
 
-# Run all checks (Rust + Python)
+# Run all Swift checks (swiftlint, test)
 [group('all')]
-check-all: check-rust check-python
+check-swift: (swiftlint "--strict") test-swift
+
+# Run all checks (Rust + Python + Swift)
+[group('all')]
+check-all: check-rust check-python check-swift
 
 # ============================================================================
 # Lifecycle & Utilities

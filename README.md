@@ -37,3 +37,7 @@ just
 - Python's `uv` for running just commands for GNOME - _run `just setup-python`_
 - macOS: Xcode (including command-line tools) - _run `just setup-swift`_
 - Linux: A distro with a modern GNOME desktop - _run `just setup-gnome`_
+
+### Swift Tests
+
+The Xcode project already contains the `LindosTrayAppTests` target. Run them locally with `just test-swift` or from Xcode using the shared **LindosTrayApp** scheme.

@@ -83,7 +83,7 @@ jobs:
 
     - name: Upload coverage to Codecov
       if: matrix.check == 'pytest'
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       with:
         files: gnome/coverage.lcov
         fail_ci_if_error: false

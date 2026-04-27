@@ -1,0 +1,71 @@
+@startuml
+title <size:24>Component View: Lindos - Desktop App (Tray)</size>
+
+set separator none
+top to bottom direction
+
+<style>
+  root {
+    BackgroundColor: #ffffff
+    FontColor: #444444
+  }
+</style>
+
+!include <C4/C4>
+!include <C4/C4_Context>
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+Person(Mitarbeiter, "Mitarbeiter", $descr="Erteilt Sprachbefehle, delegiert Aufgaben, konsumiert die adaptive UI.", $tags="", $link="")
+
+System_Boundary("Lindos_boundary", "Lindos", $tags="") {
+  Container_Boundary("Lindos.DesktopAppTray_boundary", "Desktop App (Tray)", $tags="") {
+    Component(Lindos.DesktopAppTray.TTS, "TTS", $techn="Piper", $descr="Text-to-Speech, lokal", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.IntentRouter, "Intent Router", $techn="Rust", $descr="Routet zu Skill / lokalem LLM / Agent-Server", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.LokalesLLMRuntime, "Lokales LLM Runtime", $techn="llama.cpp / ONNX", $descr="Inferenz mit kleinem Modell", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.LocalRAG, "Local RAG", $techn="Rust", $descr="Embeddings + Retrieval", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.SkillHost, "Skill Host", $techn="Rust / WASM", $descr="Sandbox für Skills", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.SkillsLibrary, "Skills Library", $techn="Plugins", $descr="Datei, Kalender lokal, OS-Aktionen, Shortcuts", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.AdaptiveUIEngine, "Adaptive UI Engine", $techn="Rust", $descr="Sammelt Signale, lernt Relevanz, generiert Layouts", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.SignalCollector, "Signal Collector", $techn="Rust", $descr="Lokale Nutzungs­telemetrie", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.LocalStore, "Local Store", $techn="SQLite + Vector", $descr="Verlauf, Präferenzen, Embeddings, Cache", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.AgentServerClient, "Agent Server Client", $techn="Rust", $descr="WebSocket/HTTPS, mTLS, Streaming", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.TrayShell, "Tray Shell", $techn="Rust", $descr="Systemtray-Icon, Fenster-Lifecycle, OS-Integration", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.UIShell, "UI Shell", $techn="WebView", $descr="Layout-Container für Dashboards & Panels", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.DashboardRenderer, "Dashboard Renderer", $techn="Web", $descr="Karten, Thumbnails, Quick-Links — Stil Claude Cowork + Home Assistant", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.FocusFeed, "Focus Feed", $techn="Web", $descr="‘Woran du gestern gearbeitet hast’, ‘Benötigt Aufmerksamkeit’", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.CommandBar, "Command Bar", $techn="Web", $descr="Universelle Eingabe (Text + Sprache)", $tags="", $link="")
+    Component(Lindos.DesktopAppTray.STT, "STT", $techn="Parakeet V3 (NVIDIA NeMo)", $descr="Speech-to-Text, lokal — selbes Modell wie Handy-App", $tags="", $link="")
+  }
+
+  Container(Lindos.AgentServer, "Agent Server", $techn="Service", $descr="Autonome, mehrstufige Aufgaben­ausführung mit Zugriff auf alle Unternehmens­datenquellen.", $tags="", $link="")
+}
+
+Rel(Mitarbeiter, Lindos.DesktopAppTray.CommandBar, "Tippt / spricht", $techn="Sprache, Tastatur", $tags="", $link="")
+Rel(Mitarbeiter, Lindos.DesktopAppTray.DashboardRenderer, "Klickt Thumbnails", $techn="Maus / Touch", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.TTS, Mitarbeiter, "Spricht Antwort", $techn="Audio Out", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.TrayShell, Lindos.DesktopAppTray.UIShell, "Steuert Fenster", $techn="OS-API", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.UIShell, Lindos.DesktopAppTray.DashboardRenderer, "Mountet Panel", $techn="WebView IPC", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.UIShell, Lindos.DesktopAppTray.FocusFeed, "Mountet Panel", $techn="WebView IPC", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.UIShell, Lindos.DesktopAppTray.CommandBar, "Mountet Panel", $techn="WebView IPC", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.UIShell, Lindos.DesktopAppTray.SignalCollector, "Sendet Events", $techn="WebView IPC", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.CommandBar, Lindos.DesktopAppTray.STT, "Audio-Stream", $techn="Audio Pipe", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.STT, Lindos.DesktopAppTray.IntentRouter, "Transkript", $techn="In-Process", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.CommandBar, Lindos.DesktopAppTray.IntentRouter, "Text", $techn="In-Process", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.IntentRouter, Lindos.DesktopAppTray.LokalesLLMRuntime, "Lokales Reasoning", $techn="In-Process", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.IntentRouter, Lindos.DesktopAppTray.SkillHost, "Skill ausführen", $techn="In-Process", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.IntentRouter, Lindos.DesktopAppTray.AgentServerClient, "Komplexe Aufgabe", $techn="In-Process", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.LokalesLLMRuntime, Lindos.DesktopAppTray.LocalRAG, "Kontext-Retrieval", $techn="In-Process", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.LokalesLLMRuntime, Lindos.DesktopAppTray.TTS, "Antworttext", $techn="In-Process", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.LocalRAG, Lindos.DesktopAppTray.LocalStore, "Vektor-Suche", $techn="SQLite/Vector", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.SkillHost, Lindos.DesktopAppTray.SkillsLibrary, "Lädt Plugin", $techn="WASM Runtime", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.SkillsLibrary, Lindos.DesktopAppTray.LocalStore, "Liest/schreibt", $techn="SQLite/FS", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.SignalCollector, Lindos.DesktopAppTray.AdaptiveUIEngine, "Push Telemetrie", $techn="In-Process", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.AdaptiveUIEngine, Lindos.DesktopAppTray.LocalStore, "Liest/schreibt Signale", $techn="SQLite/Vector", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.AdaptiveUIEngine, Lindos.DesktopAppTray.DashboardRenderer, "Layout-Update", $techn="WebView IPC", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.AdaptiveUIEngine, Lindos.DesktopAppTray.FocusFeed, "Inhalts-Update", $techn="WebView IPC", $tags="", $link="")
+Rel(Lindos.DesktopAppTray.AgentServerClient, Lindos.AgentServer, "Delegiert Aufgaben", $techn="HTTPS / WebSocket, mTLS", $tags="", $link="")
+
+SHOW_LEGEND(true)
+hide stereotypes
+@enduml

@@ -184,6 +184,34 @@ xcodebuild config='Debug':
       -configuration {{config}}
 
 # ============================================================================
+# Architecture Diagrams (C4 Model)
+# ============================================================================
+# Render diagrams via Docker to avoid local Java/Graphviz/PlantUML installs.
+# Source of truth: docs/architecture/workspace.dsl (Structurizr DSL).
+# Generated PlantUML files in docs/architecture/generated/ are committed so
+# they render directly on GitLab. Generated *.svg files are gitignored.
+
+# Render all architecture diagrams (Structurizr DSL → C4 PlantUML → SVG)
+[group('docs')]
+[working-directory: 'docs/architecture']
+diagrams:
+    docker run --rm --user "$(id -u):$(id -g)" -e JAVA_TOOL_OPTIONS=-Duser.home=/tmp \
+        -v "$PWD:/usr/local/structurizr" structurizr/structurizr \
+        export -workspace workspace.dsl -format plantuml/c4plantuml -output generated
+    cd generated && for f in structurizr-*.puml; do awk 1 "$f" > "${f#structurizr-}" && rm "$f"; done
+    docker run --rm --user "$(id -u):$(id -g)" -e JAVA_TOOL_OPTIONS=-Duser.home=/tmp \
+        -v "$PWD/generated:/data" plantuml/plantuml -tsvg 'c4-*.puml'
+
+# Serve Structurizr at http://localhost:8080 for interactive C4 modeling
+[group('docs')]
+[working-directory: 'docs/architecture']
+diagrams-serve:
+    @echo "Structurizr at http://localhost:8080/workspace/1 (Ctrl+C to stop). Be patient, takes some time to render."
+    -docker run --rm -it --user "$(id -u):$(id -g)" -e JAVA_TOOL_OPTIONS=-Duser.home=/tmp \
+        -p 8080:8080 -v "$PWD:/usr/local/structurizr" \
+        structurizr/structurizr local
+
+# ============================================================================
 # All-in-One Commands
 # ============================================================================
 
@@ -206,6 +234,6 @@ check-all: check-rust check-python
 # Clean build artifacts and reports (use -v for verbose, -n for dry-run)
 [group('lifecycle')]
 clean *args:
-    cargo clean --manifest-path rust-core/Cargo.toml {{args}}
-    -uvx pyclean gnome --debris all --erase '**/.venv/**' '**/.venv' --yes {{args}}
-    git clean -i -x
+    -cargo clean --manifest-path rust-core/Cargo.toml {{args}}
+    uvx pyclean gnome --debris all --erase '**/.venv/**' '**/.venv' --yes {{args}}
+    uvx pyclean docs/architecture --git --yes {{args}}

@@ -1,0 +1,39 @@
+@startuml
+title <size:24>System Context View: Lindos</size>
+
+set separator none
+left to right direction
+
+<style>
+  root {
+    BackgroundColor: #ffffff
+    FontColor: #444444
+  }
+</style>
+
+!include <C4/C4>
+!include <C4/C4_Context>
+
+Person(Mitarbeiter, "Mitarbeiter", $descr="Erteilt Sprachbefehle, delegiert Aufgaben, konsumiert die adaptive UI.", $tags="", $link="")
+System(Lindos, "Lindos", $descr="Lokaler Desktop-Assistent (Tray) plus autonomer Agent-Server.", $tags="", $link="")
+System(EMailKalender, "E-Mail / Kalender", $descr="M365, Google Workspace, IMAP", $tags="", $link="")
+System(Dateispeicher, "Dateispeicher", $descr="SharePoint, Drive, Nextcloud, S3", $tags="", $link="")
+System(CRM, "CRM", $descr="Kunden, Leads, Opportunities", $tags="", $link="")
+System(ERP, "ERP", $descr="Aufträge, Rechnungen, Stammdaten", $tags="", $link="")
+System(Wiki, "Wiki", $descr="Confluence, Notion, internes Wiki", $tags="", $link="")
+System(TicketingDevOps, "Ticketing / DevOps", $descr="Jira, GitLab, GitHub", $tags="", $link="")
+System(ChatKollaboration, "Chat / Kollaboration", $descr="Slack, Teams", $tags="", $link="")
+
+Rel(Mitarbeiter, Lindos, "Tippt / spricht", $techn="Sprache, Tastatur", $tags="", $link="")
+Rel(Lindos, Mitarbeiter, "Spricht Antwort", $techn="Audio Out", $tags="", $link="")
+Rel(Lindos, EMailKalender, "Liest & schreibt", $techn="OAuth / REST", $tags="", $link="")
+Rel(Lindos, Dateispeicher, "Liest & schreibt", $techn="OAuth / REST", $tags="", $link="")
+Rel(Lindos, CRM, "Liest", $techn="REST", $tags="", $link="")
+Rel(Lindos, ERP, "Liest", $techn="REST", $tags="", $link="")
+Rel(Lindos, Wiki, "Liest", $techn="REST", $tags="", $link="")
+Rel(Lindos, TicketingDevOps, "Liest & schreibt", $techn="REST", $tags="", $link="")
+Rel(Lindos, ChatKollaboration, "Liest & schreibt", $techn="REST / WebSocket", $tags="", $link="")
+
+SHOW_LEGEND(true)
+hide stereotypes
+@enduml

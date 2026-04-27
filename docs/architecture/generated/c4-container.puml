@@ -1,0 +1,45 @@
+@startuml
+title <size:24>Container View: Lindos</size>
+
+set separator none
+left to right direction
+
+<style>
+  root {
+    BackgroundColor: #ffffff
+    FontColor: #444444
+  }
+</style>
+
+!include <C4/C4>
+!include <C4/C4_Context>
+!include <C4/C4_Container>
+
+Person(Mitarbeiter, "Mitarbeiter", $descr="Erteilt Sprachbefehle, delegiert Aufgaben, konsumiert die adaptive UI.", $tags="", $link="")
+System(EMailKalender, "E-Mail / Kalender", $descr="M365, Google Workspace, IMAP", $tags="", $link="")
+System(Dateispeicher, "Dateispeicher", $descr="SharePoint, Drive, Nextcloud, S3", $tags="", $link="")
+System(CRM, "CRM", $descr="Kunden, Leads, Opportunities", $tags="", $link="")
+System(ERP, "ERP", $descr="Aufträge, Rechnungen, Stammdaten", $tags="", $link="")
+System(Wiki, "Wiki", $descr="Confluence, Notion, internes Wiki", $tags="", $link="")
+System(TicketingDevOps, "Ticketing / DevOps", $descr="Jira, GitLab, GitHub", $tags="", $link="")
+System(ChatKollaboration, "Chat / Kollaboration", $descr="Slack, Teams", $tags="", $link="")
+
+System_Boundary("Lindos_boundary", "Lindos", $tags="") {
+  Container(Lindos.AgentServer, "Agent Server", $techn="Service", $descr="Autonome, mehrstufige Aufgaben­ausführung mit Zugriff auf alle Unternehmens­datenquellen.", $tags="", $link="")
+  Container(Lindos.DesktopAppTray, "Desktop App (Tray)", $techn="Rust / WebView", $descr="Lokal laufende Tray-Anwendung, lokale Sprachsteuerung, lokale LLMs, lokale Skills, adaptive UI.", $tags="", $link="")
+}
+
+Rel(Mitarbeiter, Lindos.DesktopAppTray, "Tippt / spricht", $techn="Sprache, Tastatur", $tags="", $link="")
+Rel(Lindos.DesktopAppTray, Mitarbeiter, "Spricht Antwort", $techn="Audio Out", $tags="", $link="")
+Rel(Lindos.DesktopAppTray, Lindos.AgentServer, "Delegiert Aufgaben", $techn="HTTPS / WebSocket, mTLS", $tags="", $link="")
+Rel(Lindos.AgentServer, EMailKalender, "Liest & schreibt", $techn="OAuth / REST", $tags="", $link="")
+Rel(Lindos.AgentServer, Dateispeicher, "Liest & schreibt", $techn="OAuth / REST", $tags="", $link="")
+Rel(Lindos.AgentServer, CRM, "Liest", $techn="REST", $tags="", $link="")
+Rel(Lindos.AgentServer, ERP, "Liest", $techn="REST", $tags="", $link="")
+Rel(Lindos.AgentServer, Wiki, "Liest", $techn="REST", $tags="", $link="")
+Rel(Lindos.AgentServer, TicketingDevOps, "Liest & schreibt", $techn="REST", $tags="", $link="")
+Rel(Lindos.AgentServer, ChatKollaboration, "Liest & schreibt", $techn="REST / WebSocket", $tags="", $link="")
+
+SHOW_LEGEND(true)
+hide stereotypes
+@enduml

@@ -1,0 +1,54 @@
+@startuml
+title <size:24>Component View: Lindos - Agent Server</size>
+
+set separator none
+top to bottom direction
+
+<style>
+  root {
+    BackgroundColor: #ffffff
+    FontColor: #444444
+  }
+</style>
+
+!include <C4/C4>
+!include <C4/C4_Context>
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+System(EMailKalender, "E-Mail / Kalender", $descr="M365, Google Workspace, IMAP", $tags="", $link="")
+System(Dateispeicher, "Dateispeicher", $descr="SharePoint, Drive, Nextcloud, S3", $tags="", $link="")
+System(CRM, "CRM", $descr="Kunden, Leads, Opportunities", $tags="", $link="")
+System(ERP, "ERP", $descr="Aufträge, Rechnungen, Stammdaten", $tags="", $link="")
+System(Wiki, "Wiki", $descr="Confluence, Notion, internes Wiki", $tags="", $link="")
+System(TicketingDevOps, "Ticketing / DevOps", $descr="Jira, GitLab, GitHub", $tags="", $link="")
+System(ChatKollaboration, "Chat / Kollaboration", $descr="Slack, Teams", $tags="", $link="")
+
+System_Boundary("Lindos_boundary", "Lindos", $tags="") {
+  Container_Boundary("Lindos.AgentServer_boundary", "Agent Server", $tags="") {
+    Component(Lindos.AgentServer.AgentOrchestrator, "Agent Orchestrator", $techn="Service", $descr="Plant Aufgaben, ruft Tools auf, führt autonom aus", $tags="", $link="")
+    Component(Lindos.AgentServer.ConnectorRegistry, "Connector Registry", $techn="Service", $descr="Tool-Anbindungen an Datenquellen (MCP-Stil)", $tags="", $link="")
+    Component(Lindos.AgentServer.ServerLLMBackend, "Server-LLM Backend", $techn="Self-hosted / vermittelt", $descr="Stärkeres Modell für Reasoning & Tool-Use", $tags="", $link="")
+    Component(Lindos.AgentServer.AgentMemory, "Agent Memory", $techn="Vector DB + Event-Log", $descr="Langzeit­gedächtnis, Aufgaben-Historie, Audit", $tags="", $link="")
+    Component(Lindos.AgentServer.TaskScheduler, "Task Scheduler", $techn="Service", $descr="Wiederkehrende & verzögerte Läufe", $tags="", $link="")
+  }
+
+  Container(Lindos.DesktopAppTray, "Desktop App (Tray)", $techn="Rust / WebView", $descr="Lokal laufende Tray-Anwendung, lokale Sprachsteuerung, lokale LLMs, lokale Skills, adaptive UI.", $tags="", $link="")
+}
+
+Rel(Lindos.DesktopAppTray, Lindos.AgentServer.AgentOrchestrator, "Delegiert Aufgaben", $techn="HTTPS / WebSocket, mTLS", $tags="", $link="")
+Rel(Lindos.AgentServer.TaskScheduler, Lindos.AgentServer.AgentOrchestrator, "Triggert Läufe", $techn="In-Process", $tags="", $link="")
+Rel(Lindos.AgentServer.AgentOrchestrator, Lindos.AgentServer.ServerLLMBackend, "Reasoning, Tool-Choice", $techn="HTTP/JSON", $tags="", $link="")
+Rel(Lindos.AgentServer.AgentOrchestrator, Lindos.AgentServer.ConnectorRegistry, "Tool-Aufrufe", $techn="In-Process", $tags="", $link="")
+Rel(Lindos.AgentServer.AgentOrchestrator, Lindos.AgentServer.AgentMemory, "Liest/schreibt Kontext", $techn="Vector DB Driver", $tags="", $link="")
+Rel(Lindos.AgentServer.ConnectorRegistry, EMailKalender, "Liest & schreibt", $techn="OAuth / REST", $tags="", $link="")
+Rel(Lindos.AgentServer.ConnectorRegistry, Dateispeicher, "Liest & schreibt", $techn="OAuth / REST", $tags="", $link="")
+Rel(Lindos.AgentServer.ConnectorRegistry, CRM, "Liest", $techn="REST", $tags="", $link="")
+Rel(Lindos.AgentServer.ConnectorRegistry, ERP, "Liest", $techn="REST", $tags="", $link="")
+Rel(Lindos.AgentServer.ConnectorRegistry, Wiki, "Liest", $techn="REST", $tags="", $link="")
+Rel(Lindos.AgentServer.ConnectorRegistry, TicketingDevOps, "Liest & schreibt", $techn="REST", $tags="", $link="")
+Rel(Lindos.AgentServer.ConnectorRegistry, ChatKollaboration, "Liest & schreibt", $techn="REST / WebSocket", $tags="", $link="")
+
+SHOW_LEGEND(true)
+hide stereotypes
+@enduml

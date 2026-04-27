@@ -101,22 +101,22 @@ workspace "Lindos" "Lokaler Desktop-Assistent mit autonomem Agent-Server." {
     }
 
     views {
-        systemContext lindos "Context" {
+        systemContext lindos "c4-context" {
             include *
             autoLayout lr
         }
 
-        container lindos "Containers" {
+        container lindos "c4-container" {
             include *
             autoLayout lr
         }
 
-        component lindos.desktop "DesktopComponents" {
+        component lindos.desktop "c4-component-desktop" {
             include *
             autoLayout tb
         }
 
-        component lindos.agent "AgentComponents" {
+        component lindos.agent "c4-component-agent" {
             include *
             autoLayout tb
         }

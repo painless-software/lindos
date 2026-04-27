@@ -187,31 +187,20 @@ xcodebuild config='Debug':
 # Architecture Diagrams (C4 Model)
 # ============================================================================
 # Render diagrams via Docker to avoid local Java/Graphviz/PlantUML installs.
-# Sources live in docs/architecture/. Generated *.svg files are gitignored.
+# Source of truth: docs/architecture/workspace.dsl (Structurizr DSL).
+# Generated PlantUML files in docs/architecture/generated/ are committed so
+# they render directly on GitLab. Generated *.svg files are gitignored.
 
-# Render all architecture diagrams to SVG (PlantUML + Structurizr DSL)
-[group('docs')]
-diagrams: diagrams-puml diagrams-dsl
-
-# Render PlantUML C4 diagrams (*.puml -> *.svg)
+# Render all architecture diagrams (Structurizr DSL → C4 PlantUML → SVG)
 [group('docs')]
 [working-directory: 'docs/architecture']
-diagrams-puml:
-    docker run --rm --user "$(id -u):$(id -g)" -e JAVA_TOOL_OPTIONS=-Duser.home=/tmp \
-        -v "$PWD:/data" plantuml/plantuml -tsvg 'c4-*.puml'
-    @echo "Rendered: $(ls c4-*.svg 2>/dev/null | tr '\n' ' ')"
-
-# Export Structurizr DSL views to PlantUML and render them to SVG
-[group('docs')]
-[working-directory: 'docs/architecture']
-diagrams-dsl:
+diagrams:
     docker run --rm --user "$(id -u):$(id -g)" -e JAVA_TOOL_OPTIONS=-Duser.home=/tmp \
         -v "$PWD:/usr/local/structurizr" structurizr/structurizr \
-        export -workspace workspace.dsl -format plantuml/c4plantuml
-    for f in structurizr-*.puml; do mv -- "$f" "workspace-${f#structurizr-}"; done
+        export -workspace workspace.dsl -format plantuml/c4plantuml -output generated
+    cd generated && for f in structurizr-*.puml; do awk 1 "$f" > "${f#structurizr-}" && rm "$f"; done
     docker run --rm --user "$(id -u):$(id -g)" -e JAVA_TOOL_OPTIONS=-Duser.home=/tmp \
-        -v "$PWD:/data" plantuml/plantuml -tsvg 'workspace-*.puml'
-    @echo "Rendered: $(ls workspace-*.svg 2>/dev/null | tr '\n' ' ')"
+        -v "$PWD/generated:/data" plantuml/plantuml -tsvg 'c4-*.puml'
 
 # Serve Structurizr at http://localhost:8080 for interactive C4 modeling
 [group('docs')]

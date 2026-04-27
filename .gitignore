@@ -24,8 +24,7 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 
-# Generated architecture diagrams
-docs/architecture/*.svg
-docs/architecture/workspace-*.puml
+# Generated architecture diagrams (PlantUML committed; SVGs are large)
+docs/architecture/generated/*.svg
 docs/architecture/workspace.json
 docs/architecture/.structurizr/

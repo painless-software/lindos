@@ -184,6 +184,45 @@ xcodebuild config='Debug':
       -configuration {{config}}
 
 # ============================================================================
+# Architecture Diagrams (C4 Model)
+# ============================================================================
+# Render diagrams via Docker to avoid local Java/Graphviz/PlantUML installs.
+# Sources live in docs/architecture/. Generated *.svg files are gitignored.
+
+# Render all architecture diagrams to SVG (PlantUML + Structurizr DSL)
+[group('docs')]
+diagrams: diagrams-puml diagrams-dsl
+
+# Render PlantUML C4 diagrams (*.puml -> *.svg)
+[group('docs')]
+[working-directory: 'docs/architecture']
+diagrams-puml:
+    docker run --rm --user "$(id -u):$(id -g)" -e JAVA_TOOL_OPTIONS=-Duser.home=/tmp \
+        -v "$PWD:/data" plantuml/plantuml -tsvg 'c4-*.puml'
+    @echo "Rendered: $(ls c4-*.svg 2>/dev/null | tr '\n' ' ')"
+
+# Export Structurizr DSL views to PlantUML and render them to SVG
+[group('docs')]
+[working-directory: 'docs/architecture']
+diagrams-dsl:
+    docker run --rm --user "$(id -u):$(id -g)" -e JAVA_TOOL_OPTIONS=-Duser.home=/tmp \
+        -v "$PWD:/usr/local/structurizr" structurizr/structurizr \
+        export -workspace workspace.dsl -format plantuml/c4plantuml
+    for f in structurizr-*.puml; do mv -- "$f" "workspace-${f#structurizr-}"; done
+    docker run --rm --user "$(id -u):$(id -g)" -e JAVA_TOOL_OPTIONS=-Duser.home=/tmp \
+        -v "$PWD:/data" plantuml/plantuml -tsvg 'workspace-*.puml'
+    @echo "Rendered: $(ls workspace-*.svg 2>/dev/null | tr '\n' ' ')"
+
+# Serve Structurizr at http://localhost:8080 for interactive C4 modeling
+[group('docs')]
+[working-directory: 'docs/architecture']
+diagrams-serve:
+    @echo "Structurizr at http://localhost:8080/workspace/1 (Ctrl+C to stop). Be patient, takes some time to render."
+    -docker run --rm -it --user "$(id -u):$(id -g)" -e JAVA_TOOL_OPTIONS=-Duser.home=/tmp \
+        -p 8080:8080 -v "$PWD:/usr/local/structurizr" \
+        structurizr/structurizr local
+
+# ============================================================================
 # All-in-One Commands
 # ============================================================================
 
@@ -206,6 +245,6 @@ check-all: check-rust check-python
 # Clean build artifacts and reports (use -v for verbose, -n for dry-run)
 [group('lifecycle')]
 clean *args:
-    cargo clean --manifest-path rust-core/Cargo.toml {{args}}
-    -uvx pyclean gnome --debris all --erase '**/.venv/**' '**/.venv' --yes {{args}}
-    git clean -i -x
+    -cargo clean --manifest-path rust-core/Cargo.toml {{args}}
+    uvx pyclean gnome --debris all --erase '**/.venv/**' '**/.venv' --yes {{args}}
+    uvx pyclean docs/architecture --git --yes {{args}}

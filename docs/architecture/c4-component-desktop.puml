@@ -1,0 +1,67 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Lindos Desktop App – Component Diagram (C4 Level 3)
+
+Person(user, "Mitarbeiter")
+
+Container_Boundary(desktop, "Lindos Desktop App") {
+    Component(tray, "Tray Shell", "Rust", "Systemtray, Window-Manager, OS-Hooks")
+    Component(uiShell, "UI Shell", "WebView", "Layout-Container für Dashboards & Panels")
+    Component(dashboards, "Dashboard Renderer", "Web", "Karten, Thumbnails, Quick-Links — Stil: Claude Cowork + Home Assistant")
+    Component(focusFeed, "Focus Feed", "Web", "‘Woran du gestern gearbeitet hast’, ‘Benötigt Aufmerksamkeit’")
+    Component(commandBar, "Command Bar", "Web", "Universelle Texteingabe / Sprach-Eingang")
+
+    Component(stt, "STT", "Parakeet V3 (NVIDIA NeMo), lokal via Handy", "Speech-to-Text — selbes Modell wie Handy-App (handy.computer)")
+    Component(tts, "TTS", "Piper lokal", "Text-to-Speech")
+    Component(intent, "Intent Router", "Rust", "Routet Eingaben zu Skill, lokalem LLM oder Agent-Server")
+
+    Component(llmRuntime, "Lokales LLM Runtime", "llama.cpp / ONNX", "Inferenz mit kleinem Modell")
+    Component(rag, "Local RAG", "Rust", "Embeddings + Retrieval über Local Store")
+
+    Component(skillHost, "Skill Host", "Rust / WASM", "Lädt & führt Skills sandboxed aus")
+    Component(skillsLib, "Skills Library", "Plugins", "Datei, Kalender lokal, Clipboard, OS-Aktionen, Shortcuts")
+
+    Component(adaptive, "Adaptive UI Engine", "Rust", "Sammelt Signale, lernt Relevanz, generiert Layout-Vorschläge")
+    Component(signals, "Signal Collector", "Rust", "Telemetrie lokal: Klicks, Verweildauer, Aufgaben-Status")
+
+    ComponentDb(localStore, "Local Store", "SQLite + Vector + Files", "Verlauf, Präferenzen, Embeddings, Cache")
+
+    Component(agentClient, "Agent Server Client", "Rust", "WebSocket/HTTPS, mTLS, Streaming")
+}
+
+System_Ext(agentSrv, "Agent Server", "")
+
+Rel(user, commandBar, "Tippt / spricht")
+Rel(user, dashboards, "Klickt Thumbnails")
+Rel(tray, uiShell, "Öffnet Fenster")
+Rel(uiShell, dashboards, "")
+Rel(uiShell, focusFeed, "")
+Rel(uiShell, commandBar, "")
+
+Rel(commandBar, stt, "Audio")
+Rel(stt, intent, "Transkript")
+Rel(commandBar, intent, "Text")
+
+Rel(intent, llmRuntime, "Lokales Reasoning")
+Rel(intent, skillHost, "Skill ausführen")
+Rel(intent, agentClient, "An Agent Server delegieren")
+
+Rel(skillHost, skillsLib, "Lädt")
+Rel(skillsLib, localStore, "Liest/schreibt")
+Rel(llmRuntime, rag, "Kontext-Retrieval")
+Rel(rag, localStore, "Vektor-Suche")
+Rel(llmRuntime, tts, "Antworttext")
+Rel(tts, user, "Spricht")
+
+Rel(uiShell, signals, "Events")
+Rel(signals, adaptive, "")
+Rel(adaptive, localStore, "")
+Rel(adaptive, dashboards, "Layout-Update")
+Rel(adaptive, focusFeed, "Inhalts-Update")
+
+Rel(agentClient, agentSrv, "HTTPS/WS, mTLS")
+Rel(agentSrv, agentClient, "Stream: Fortschritt, Ergebnis")
+
+SHOW_LEGEND()
+@enduml

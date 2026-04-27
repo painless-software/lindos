@@ -1,0 +1,30 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Lindos – System Context (C4 Level 1)
+
+Person(user, "Mitarbeiter", "Erteilt Sprachbefehle, delegiert Aufgaben, konsumiert die adaptive UI.")
+
+System(lindos, "Lindos", "Lokaler Desktop-Assistent (Tray) plus autonomer Agent-Server. Lokale Sprachsteuerung, lokale LLMs, lokale Skills; selbst­adaptive UI; Agent-Server mit Anbindung an die Unternehmens­datenquellen.")
+
+System_Ext(email, "E-Mail / Kalender", "M365, Google Workspace, IMAP")
+System_Ext(files, "Dateispeicher", "SharePoint, Google Drive, Nextcloud, S3")
+System_Ext(crm, "CRM", "Kunden-, Lead- und Opportunity-Daten")
+System_Ext(erp, "ERP", "Aufträge, Rechnungen, Stammdaten")
+System_Ext(wiki, "Wiki / Wissensbasis", "Confluence, Notion, internes Wiki")
+System_Ext(tickets, "Ticketing / DevOps", "Jira, GitLab, GitHub")
+System_Ext(chat, "Chat / Kollaboration", "Slack, Teams")
+
+Rel(user, lindos, "Spricht, klickt, sieht Dashboards")
+Rel_Back(user, lindos, "Antwortet per Sprache, Benachrichtigung, UI")
+
+Rel(lindos, email, "Liest & schreibt", "OAuth/API")
+Rel(lindos, files, "Liest & schreibt", "OAuth/API")
+Rel(lindos, crm, "Liest", "API")
+Rel(lindos, erp, "Liest", "API")
+Rel(lindos, wiki, "Liest", "API")
+Rel(lindos, tickets, "Liest & schreibt", "API")
+Rel(lindos, chat, "Liest & schreibt", "API")
+
+SHOW_LEGEND()
+@enduml

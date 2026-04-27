@@ -23,3 +23,9 @@ __pycache__/
 .venv/
 *.egg-info/
 .pytest_cache/
+
+# Generated architecture diagrams
+docs/architecture/*.svg
+docs/architecture/workspace-*.puml
+docs/architecture/workspace.json
+docs/architecture/.structurizr/

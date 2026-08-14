@@ -51,7 +51,7 @@ jobs:
         tool: just
 
     - name: Install uv and set python version
-      uses: astral-sh/setup-uv@v7
+      uses: astral-sh/setup-uv@v10.0.1
       with:
         python-version: ${{ matrix.python-version }}
 
